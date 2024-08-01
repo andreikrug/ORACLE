@@ -13,3 +13,6 @@ conn  sys as sysdba;
  
 
 show con_name;
+
+
+revoke create table  from C##COMMONUSER container=current; // Revogar acesso de criação de tabela
