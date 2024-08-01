@@ -1,0 +1,15 @@
+ SELECT con_id, dbid, name FROM v$containers WHERE con_id = 1;
+
+create user C##TESTE identified by "commonuser" container=all;
+grant connect to C##TESTE container=all;
+grant create table  to C##TESTE container=current;
+create table t1(a number );
+
+
+
+
+
+conn  sys as sysdba;
+ 
+
+show con_name;
