@@ -16,3 +16,41 @@ show con_name;
 
 
 revoke create table  from C##COMMONUSER container=current; // Revogar acesso de criação de tabela
+
+
+
+
+DECLARE
+  v_error_message VARCHAR2(4000);
+BEGIN 
+  SAVEPOINT start_transaction;  -- Inicia um ponto de salvamento para a transação
+
+-- Inserir dados na tabela SUPPLIER
+  INSERT INTO CLIENTE.SUPPLIER (ID, COMPANYNAME, CONTACTNAME, CONTACTTITLE, CITY, COUNTRY, PHONE, FAX)
+  VALUES (100, 'Supplier Company', 'John Doe', 'CEO', 'City A', 'Country A', '123-456-7890', '123-456-7891');
+
+  -- Inserir dados na tabela CUSTOMER
+  INSERT INTO CLIENTE.CUSTOMER (ID, FIRSTNAME, LASTNAME, CITY, COUNTRY, PHONE)
+  VALUES (100, 'Jane', 'Doe', 'City B', 'Country B', '987-654-3210');
+
+  -- Inserir dados na tabela PRODUCT
+  INSERT INTO CLIENTE.PRODUCT (ID, PRODUCTNAME, SUPPLIERID, UNITPRICE, PACKAGE, ISDISCONTINUED)
+  VALUES (100, 'Product 100', 100, 19.99, 'Package A', 0);
+
+  -- Inserir dados na tabela ORDER
+  INSERT INTO CLIENTE."order" (ID, ORDERDATE, ORDERNUMBER, CUSTOMERID, TOTALAMOUNT)
+  VALUES (100, TO_DATE('2023-08-08', 'YYYY-MM-DD'), 'ORD-123', 100, 50.00);
+
+  -- Inserir dados na tabela ORDERITEM
+  INSERT INTO CLIENTE.ORDERITEM (ID, ORDERID, PRODUCTID, UNITPRICE, QUANTITY)
+  VALUES (100, 100, 100, 19.99, 2);
+
+  -- Commit da transação se tudo der certo
+  COMMIT;
+
+EXCEPTION 
+  WHEN OTHERS THEN -- Isso trata qualquer erro não tratado anteriormente.
+    v_error_message := SQLERRM;  -- Obtém a mensagem de erro do Oracle
+    ROLLBACK TO SAVEPOINT start_transaction;  -- Desfaz a transação até o ponto de salvamento
+    DBMS_OUTPUT.PUT_LINE('Erro: ' || v_error_message);  -- Exibe a mensagem de erro
+END;
