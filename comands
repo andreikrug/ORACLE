@@ -54,3 +54,40 @@ EXCEPTION
     ROLLBACK TO SAVEPOINT start_transaction;  -- Desfaz a transação até o ponto de salvamento
     DBMS_OUTPUT.PUT_LINE('Erro: ' || v_error_message);  -- Exibe a mensagem de erro
 END;
+
+
+
+
+
+
+Podemos dar privilégios para os usuários, mas também podemos criar roles, as quais englobarão vários privilégios, facilitando para caso tenha que replicar essa role para outros.
+
+DBA_SYS_PRIVS;
+-> Lista os privilégios do sistema concedidos aos usuários.
+
+v$pwfile_users; 
+-> Lista os acessos mais criticos para cada usuários:
+SYS, DBA...
+
+
+DBA_TAB_PRIVS;
+-> Lista informações do usuários, quem deu privilégios para ele e quais tabelas ele tem acesso.
+
+DBA_ROLE_PRIVS;
+-> Infos sobre as roles concedidas
+
+
+grant select on blabla to teste with grant option;
+-> o with grant option permite com que o usuário teste também possa dar privilégios para outros usuáiros.
+
+create tablespace tablespace_teste
+datafile 'caminho do arquivo' size 100 M
+autoextend on next 10M maxsize 500M;
+
+select table_name, tablespace_name
+from dba_tables where owner = 'nome do pdb';
+-> mostra o nome do tablespace que a tabela pertence
+
+alter table nomedatabela
+move online tablespace nomedotablespace;
+-> Comando para mover uma tabela para um novo tablespace.
