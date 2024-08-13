@@ -1,0 +1,20 @@
+create or replace function elim_spaces(param varchar)
+  return varchar
+IS
+  ajuste varchar(30);
+  i  number := 1;
+begin
+    /*ajuste := param;*/
+    ajuste := ltrim(param); 
+    ajuste := rtrim(ajuste);
+    
+    
+    while i <= length(param)
+    loop
+        ajuste := replace(ajuste, '  ', ' ');
+        i := i + 1;
+    end loop;
+    ajuste := translate(ajuste, '~`', 'ab');
+    dbms_output.put_line(ajuste);
+    return ajuste;
+end;
